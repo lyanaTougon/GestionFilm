@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GestionFilm - Accueil</title>
     <link rel="stylesheet" href="style.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
     <section>
@@ -24,32 +26,51 @@
             </div>
         </nav>
 
-        <!-- Slider de films juste sous la barre de navigation -->
-        <section class="movie-slider">
-            <div class="movie-card">
-                <img src="avatar.jpg" alt="Film avatar">
-                <div class="movie-info">
-                    <h3>Film 1</h3>
-                    <p>Genre / Année</p>
-                </div>
-            </div>
+      <div class="swiper mySwiper">
+  <div class="swiper-wrapper">
 
-            <div class="movie-card">
-                <img src="fnaf2.jpg" alt="Film fnaf2">
-                <div class="movie-info">
-                    <h3>Film 2</h3>
-                    <p>Genre / Année</p>
-                </div>
-            </div>
+    <!-- Film 1 -->
+    <div class="swiper-slide">
+      <div class="image">
+        <img src="avatar.jpg" alt="Avatar 3">
+        <div class="black">
+          <h1>Avatar 3</h1>
+          <div class="stars">
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star"></i>
+            <i class="fa-solid fa-star-half"></i>
+            <i class="fa-regular fa-star"></i>
+          </div>
+          <p>Lorem ipsum...</p>
+          <div class="genre">
+            <a href="#" class="category">Action</a>
+            <a href="#" class="category">Drama</a>
+            <a href="#" class="category">4K</a>
+          </div>
+          <div class="watch">
+            <i class="fa-solid fa-play"></i>
+            <p>Trailer</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <div class="movie-card">
-                <img src="film3.jpg" alt="Film 3">
-                <div class="movie-info">
-                    <h3>Film 3</h3>
-                    <p>Genre / Année</p>
-                </div>
-            </div>
-        </section>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Boutons Swiper -->
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-pagination"></div>
+</div>
+
+
+
     </section>
+    
 </body>
 </html>
