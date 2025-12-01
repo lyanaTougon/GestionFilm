@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Films</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="film.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <h1>App<span>Film</span></h1>
+        </div>
+        <div class="right">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="film.html" class="active">Films</a></li>
+                <li><a href="mesnotes.html">Mes Notes</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Section Films -->
+    <section class="film-section">
+        <h2>FILMS</h2>
+
+        <!-- Barre de recherche -->
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Rechercher un film...">
+        </div>
+
+        <!-- Grille des films -->
+        <div class="movie-grid" id="movieGrid">
+
+            <div class="movie-card" data-title="Avatar 3">
+    <a href="films/avatar.html"><img src="avatar.jpg" alt="Avatar 3"></a>
+</div>
+
+
+            <div class="movie-card" data-title="Avengers Infinity War">
+                <a href="/film/avengers_infinity_war"><img src="Films/avengers_infinity_war.jpg" alt="Avengers Infinity War"></a>
+            </div>
+
+            <div class="movie-card" data-title="Interceptor">
+                <a href="/film/interceptor"><img src="interceptor.jpg" alt="Interceptor"></a>
+            </div>
+
+            <div class="movie-card" data-title="Thor">
+                <a href="/film/thor"><img src="thor.jpg" alt="Thor"></a>
+            </div>
+
+            <div class="movie-card" data-title="Black Adam">
+                <a href="/film/blackadam"><img src="blackadam.jpg" alt="Black Adam"></a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Script de recherche -->
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        const movieGrid = document.getElementById('movieGrid');
+        const movieCards = movieGrid.getElementsByClassName('movie-card');
+
+        searchInput.addEventListener('input', function() {
+            const filter = searchInput.value.toLowerCase();
+
+            for (let i = 0; i < movieCards.length; i++) {
+                const title = movieCards[i].dataset.title.toLowerCase();
+                if (title.includes(filter)) {
+                    movieCards[i].style.display = '';
+                } else {
+                    movieCards[i].style.display = 'none';
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
+
