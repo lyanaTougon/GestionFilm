@@ -1,161 +1,186 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mes Notes - AppFilm</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="mesnotes.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mes Notes - AppFilm</title>
+
+<!-- Tes CSS locaux -->
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="mesnotes.css">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<!-- Flatpickr pour mois+année -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+
+<style>
+    /* Styles minimal pour la case et le bouton */
+    #unknownDate { margin-left: 5px; }
+    button { cursor: pointer; }
+</style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">
-            <h1>App<span>Film</span></h1>
-        </div>
-        <div class="right">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="film.html">Films</a></li>
-                <li><a href="mesnotes.html" class="active">Mes Notes</a></li>
-            </ul>
-        </div>
-    </nav>
 
-    <section class="notes-section">
-        <div class="container">
-            <h2>Mes Notes</h2>
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">
+        <h1>App<span>Film</span></h1>
+    </div>
+    <div class="right">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="film.html">Films</a></li>
+            <li><a href="mesnotes.html" class="active">Mes Notes</a></li>
+        </ul>
+    </div>
+</nav>
 
-            <!-- Formulaire pour noter un film -->
-            <form id="noteForm">
-                <label for="filmName">Nom du film :</label>
-                <input type="text" id="filmName" placeholder="Ex: Avatar 3" list="filmsList" required>
-                <datalist id="filmsList"></datalist>
+<section class="notes-section">
+    <div class="container">
+        <h2>Mes Notes</h2>
 
-                <label for="filmRating">Note (1 à 5) :</label>
-                <select id="filmRating" required>
-                    <option value="">--Choisir--</option>
-                    <option value="1">1 ⭐</option>
-                    <option value="2">2 ⭐</option>
-                    <option value="3">3 ⭐</option>
-                    <option value="4">4 ⭐</option>
-                    <option value="5">5 ⭐</option>
-                </select>
+        <!-- Formulaire pour noter un film -->
+        <form id="noteForm">
+            <label for="filmName">Nom du film :</label>
+            <input type="text" id="filmName" placeholder="Ex: Avatar 3" list="filmsList" required>
+            <datalist id="filmsList"></datalist>
 
-                <!-- AJOUT : DATE -->
-                <label for="filmDate">Date vue :</label>
-                <input type="date" id="filmDate" required>
+            <label for="filmRating">Note :</label>
+            <select id="filmRating" required>
+                <option value="">--Choisir--</option>
+                <option value="1">1 ⭐</option>
+                <option value="2">2 ⭐</option>
+                <option value="3">3 ⭐</option>
+                <option value="4">4 ⭐</option>
+                <option value="5">5 ⭐</option>
+            </select>
 
-                <button type="submit">Ajouter la note</button>
-            </form>
+            <label for="filmMonth">Mois/Année :</label>
+            <input type="text" id="filmMonth" placeholder="Choisir mois et année">
 
-            <p id="errorMsg" style="color:#ff4d4d; margin-top:5px;"></p>
-
-            <hr>
-
-            <!-- Liste des notes -->
-            <div id="notesList">
-                <h3>Vos films notés :</h3>
-                <ul id="notesUl"></ul>
+            <div>
+                <input type="checkbox" id="unknownDate">
+                <label for="unknownDate">Je ne sais pas</label>
             </div>
-        </div>
-    </section>
 
-    <script>
-        // ✅ Liste des films disponibles
-        const validFilms = [
-            "Avatar 3",
-            "Five Night At Freddy 2",
-            "Inception",
-            "Titanic"
-        ];
+            <button type="submit">Ajouter la note</button>
+        </form>
 
-        // Remplir le datalist automatiquement
-        const filmsList = document.getElementById('filmsList');
-        validFilms.forEach(film => {
-            const option = document.createElement('option');
-            option.value = film;
-            filmsList.appendChild(option);
-        });
+        <p id="errorMsg" style="color:#ff4d4d; margin-top:5px;"></p>
 
-        // Récupérer et sauvegarder les notes
-        function getNotes() {
-            const notes = localStorage.getItem('mesNotes');
-            return notes ? JSON.parse(notes) : [];
-        }
+        <hr>
 
-        function saveNotes(notes) {
-            localStorage.setItem('mesNotes', JSON.stringify(notes));
-        }
+        <h3>Vos films notés :</h3>
+        <ul id="notesUl"></ul>
+    </div>
+</section>
 
-        // Supprimer une note
-        function removeNote(index) {
-            const notes = getNotes();
-            notes.splice(index, 1);
-            saveNotes(notes);
-            displayNotes();
-        }
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+<script>
+    // Liste des films disponibles
+    const validFilms = ["Avatar 3","Five Night At Freddy 2","Inception","Titanic"];
 
-        // Afficher les notes
-        function displayNotes() {
-            const notes = getNotes();
-            const notesUl = document.getElementById('notesUl');
-            notesUl.innerHTML = '';
+    // Remplir le datalist
+    const filmsList = document.getElementById('filmsList');
+    validFilms.forEach(film => {
+        const option = document.createElement('option');
+        option.value = film;
+        filmsList.appendChild(option);
+    });
 
-            if (notes.length === 0) {
-                notesUl.innerHTML = '<li>Aucune note pour le moment.</li>';
-            } else {
-                notes.forEach((note, index) => {
-                    const li = document.createElement('li');
-                    li.textContent = `${note.film} - ${note.rating} ⭐ - Vu le : ${note.date}`;
+    // Initialiser Flatpickr pour mois+année
+    flatpickr("#filmMonth", {
+        plugins: [new monthSelectPlugin({
+            shorthand: true,
+            dateFormat: "Y-m",
+            altFormat: "F Y"
+        })]
+    });
 
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.textContent = "Supprimer";
-                    deleteBtn.style.marginLeft = "10px";
-                    deleteBtn.style.backgroundColor = "#ff4d4d";
-                    deleteBtn.style.color = "#fff";
-                    deleteBtn.style.border = "none";
-                    deleteBtn.style.borderRadius = "5px";
-                    deleteBtn.style.cursor = "pointer";
-                    deleteBtn.style.padding = "3px 7px";
-                    deleteBtn.addEventListener('click', () => removeNote(index));
+    // Gestion du stockage local
+    function getNotes() {
+        const notes = localStorage.getItem('mesNotes');
+        return notes ? JSON.parse(notes) : [];
+    }
 
-                    li.appendChild(deleteBtn);
-                    notesUl.appendChild(li);
-                });
-            }
-        }
+    function saveNotes(notes) {
+        localStorage.setItem('mesNotes', JSON.stringify(notes));
+    }
 
-        // Gestion du formulaire
-        const noteForm = document.getElementById('noteForm');
-        const errorMsg = document.getElementById('errorMsg');
-
-        noteForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const filmName = document.getElementById('filmName').value.trim();
-            const filmRating = document.getElementById('filmRating').value;
-            const filmDate = document.getElementById('filmDate').value;
-
-            if (!validFilms.includes(filmName)) {
-                errorMsg.textContent = "Film invalide !";
-                return;
-            }
-
-            const notes = getNotes();
-            notes.push({ film: filmName, rating: filmRating, date: filmDate });
-            saveNotes(notes);
-            displayNotes();
-            noteForm.reset();
-            errorMsg.textContent = "";
-        });
-
-        // Affichage initial
+    function removeNote(index) {
+        const notes = getNotes();
+        notes.splice(index, 1);
+        saveNotes(notes);
         displayNotes();
-    </script>
+    }
+
+    function displayNotes() {
+        const notes = getNotes();
+        const notesUl = document.getElementById('notesUl');
+        notesUl.innerHTML = '';
+
+        if (notes.length === 0) {
+            notesUl.innerHTML = '<li>Aucune note pour le moment.</li>';
+        } else {
+            notes.forEach((note, index) => {
+                const li = document.createElement('li');
+                li.textContent = `${note.film} - ${note.rating} ⭐ - Vu le : ${note.date}`;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = "Supprimer";
+                deleteBtn.style.marginLeft = "10px";
+                deleteBtn.style.backgroundColor = "#ff4d4d";
+                deleteBtn.style.color = "#fff";
+                deleteBtn.style.border = "none";
+                deleteBtn.style.borderRadius = "5px";
+                deleteBtn.style.cursor = "pointer";
+                deleteBtn.style.padding = "3px 7px";
+                deleteBtn.addEventListener('click', () => removeNote(index));
+
+                li.appendChild(deleteBtn);
+                notesUl.appendChild(li);
+            });
+        }
+    }
+
+    // Gestion du formulaire
+    const noteForm = document.getElementById('noteForm');
+    const errorMsg = document.getElementById('errorMsg');
+
+    noteForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const filmName = document.getElementById('filmName').value.trim();
+        const filmRating = document.getElementById('filmRating').value;
+        const filmMonth = document.getElementById('filmMonth').value;
+        const unknownDate = document.getElementById('unknownDate').checked;
+
+        if (!validFilms.includes(filmName)) {
+            errorMsg.textContent = "Film invalide !";
+            return;
+        }
+
+        const filmDate = unknownDate ? "Inconnue" : (filmMonth || "Non précisé");
+
+        const notes = getNotes();
+        notes.push({ film: filmName, rating: filmRating, date: filmDate });
+        saveNotes(notes);
+        displayNotes();
+        noteForm.reset();
+        errorMsg.textContent = "";
+    });
+
+    // Affichage initial
+    displayNotes();
+</script>
 </body>
 </html>
+
+
 
 
 
