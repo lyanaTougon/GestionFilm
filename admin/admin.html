@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Gestion des films</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<h1>Admin - Gestion des films</h1>
+
+<form id="filmForm">
+    <input type="text" id="filmTitle" placeholder="Titre du film" required>
+    <input type="text" id="filmDesc" placeholder="Description">
+    <input type="text" id="filmImg" placeholder="image/avatar.jpg">
+    <input type="text" id="filmLink" placeholder="film/avatar.html">
+    <button type="submit">Ajouter / Modifier</button>
+    <input type="hidden" id="editIndex">
+</form>
+
+<h2>Liste des films</h2>
+<ul id="filmList"></ul>
+
+<script>
+// Récupère les films
+function getFilms() {
+    return JSON.parse(localStorage.getItem('films') || '[]');
+}
+
+// Sauvegarde films
+function saveFilms(films) {
+    localStorage.setItem('films', JSON.stringify(films));
+}
+
+// Affiche films
+function displayFilmsAdmin() {
+    const films = getFilms();
+    const filmList = document.getElementById('filmList');
+    filmList.innerHTML = '';
+
+    if(films.length === 0){
+        filmList.innerHTML = '<li>Aucun film pour le moment.</li>';
+        return;
+    }
+
+    films.forEach((film, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <strong>${film.title}</strong>
+            <p>${film.desc}</p>
+            <div class="btn-group">
+                <button class="edit">Modifier</button>
+                <button class="delete">Supprimer</button>
+            </div>
+        `;
+
+        li.querySelector('.edit').onclick = () => {
+            document.getElementById('filmTitle').value = film.title;
+            document.getElementById('filmDesc').value = film.desc;
+            document.getElementById('filmImg').value = film.img;
+            document.getElementById('filmLink').value = film.link;
+            document.getElementById('editIndex').value = index;
+        };
+
+        li.querySelector('.delete').onclick = () => {
+            films.splice(index, 1);
+            saveFilms(films);
+            displayFilmsAdmin();
+        };
+
+        filmList.appendChild(li);
+    });
+}
+
+// Formulaire
+document.getElementById('filmForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const title = document.getElementById('filmTitle').value.trim();
+    const desc = document.getElementById('filmDesc').value.trim();
+    const img = document.getElementById('filmImg').value.trim();
+    const link = document.getElementById('filmLink').value.trim();
+    const editIndex = document.getElementById('editIndex').value;
+
+    const films = getFilms();
+    const filmObj = { title, desc, img, link };
+
+    if(editIndex !== '') {
+        films[editIndex] = filmObj;
+    } else {
+        films.push(filmObj);
+    }
+
+    saveFilms(films);
+    displayFilmsAdmin();
+    e.target.reset();
+    document.getElementById('editIndex').value = '';
+});
+
+// Affichage initial
+displayFilmsAdmin();
+</script>
+
+</body>
+</html>
+

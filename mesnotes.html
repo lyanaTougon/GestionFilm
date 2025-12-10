@@ -44,6 +44,10 @@
                     <option value="5">5 ⭐</option>
                 </select>
 
+                <!-- AJOUT : DATE -->
+                <label for="filmDate">Date vue :</label>
+                <input type="date" id="filmDate" required>
+
                 <button type="submit">Ajouter la note</button>
             </form>
 
@@ -66,7 +70,6 @@
             "Five Night At Freddy 2",
             "Inception",
             "Titanic"
-            // ajoute ici d'autres films disponibles
         ];
 
         // Remplir le datalist automatiquement
@@ -95,18 +98,18 @@
             displayNotes();
         }
 
-        // Afficher les notes avec bouton supprimer
+        // Afficher les notes
         function displayNotes() {
             const notes = getNotes();
             const notesUl = document.getElementById('notesUl');
             notesUl.innerHTML = '';
 
-            if(notes.length === 0) {
+            if (notes.length === 0) {
                 notesUl.innerHTML = '<li>Aucune note pour le moment.</li>';
             } else {
                 notes.forEach((note, index) => {
                     const li = document.createElement('li');
-                    li.textContent = `${note.film} - ${note.rating} ⭐`;
+                    li.textContent = `${note.film} - ${note.rating} ⭐ - Vu le : ${note.date}`;
 
                     const deleteBtn = document.createElement('button');
                     deleteBtn.textContent = "Supprimer";
@@ -133,6 +136,7 @@
             e.preventDefault();
             const filmName = document.getElementById('filmName').value.trim();
             const filmRating = document.getElementById('filmRating').value;
+            const filmDate = document.getElementById('filmDate').value;
 
             if (!validFilms.includes(filmName)) {
                 errorMsg.textContent = "Film invalide !";
@@ -140,7 +144,7 @@
             }
 
             const notes = getNotes();
-            notes.push({ film: filmName, rating: filmRating });
+            notes.push({ film: filmName, rating: filmRating, date: filmDate });
             saveNotes(notes);
             displayNotes();
             noteForm.reset();
@@ -152,6 +156,7 @@
     </script>
 </body>
 </html>
+
 
 
 

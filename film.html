@@ -1,110 +1,78 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Films</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="film.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Films - AppFilm</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="film.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="logo">
-            <h1>App<span>Film</span></h1>
-        </div>
-        <div class="right">
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="film.html" class="active">Films</a></li>
-                <li><a href="mesnotes.html">Mes Notes</a></li>
-            </ul>
-        </div>
-    </nav>
+<nav class="navbar">
+    <div class="logo"><h1>App<span>Film</span></h1></div>
+    <div class="right">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="film.html" class="active">Films</a></li>
+            <li><a href="mesnotes.html">Mes Notes</a></li>
+        </ul>
+    </div>
+</nav>
 
-    <!-- Section Films -->
-    <section class="film-section">
-        <h2>FILMS</h2>
+<section class="film-section">
+    <h2>FILMS</h2>
 
-        <!-- Barre de recherche -->
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Rechercher un film...">
-        </div>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Rechercher un film...">
+    </div>
 
-        <!-- Grille des films -->
-        <div class="movie-grid" id="movieGrid">
+    <div class="movie-grid" id="movieGrid"></div>
+</section>
 
-            <div class="movie-card" data-title="Avatar 3">
-    <a href="films/avatar.html"><img src="avatar.jpg" alt="Avatar 3"></a>
-</div>
+<script>
+function getFilms() {
+    return JSON.parse(localStorage.getItem('films') || '[]');
+}
 
+function displayFilms() {
+    const movieGrid = document.getElementById('movieGrid');
+    movieGrid.innerHTML = '';
+    const films = getFilms();
 
-            <div class="movie-card" data-title="Avengers Infinity War">
-                <a href="films/avengers_infinity_war.html"><img src="Films/avengers_infinity_war.jpg" alt="Avengers Infinity War"></a>
-            </div>
+    if(films.length === 0){
+        movieGrid.innerHTML = '<p style="color:#fff;">Aucun film disponible.</p>';
+        return;
+    }
 
-            <div class="movie-card" data-title="Spider-Man: New Generation">
-                <a href="films/spiderman.html"><img src="spiderman.jpg" alt="Spider-Man: New Generation"></a>
-            </div>
+    films.forEach(film => {
+        const div = document.createElement('div');
+        div.className = 'movie-card';
+        div.dataset.title = film.title;
 
-            <div class="movie-card" data-title="Kung Fu Panda 2">
-                <a href="films/kungfupanda.html "><img src="kunfupanda.webp" alt="Kung Fu Panda 2"></a>
-            </div>
+        div.innerHTML = `
+            <a href="${film.link || '#'}">
+                <img src="${film.img || 'images/default.jpg'}" alt="${film.title}">
+            </a>
+            <p style="text-align:center; margin-top:5px;">${film.title}</p>
+        `;
+        movieGrid.appendChild(div);
+    });
+}
 
-            <div class="movie-card" data-title="Mission impossible : Fallout">
-                <a href="films/missionimpossible.html"><img src="missionimpossible.jpg" alt="Mission impossible : Fallout"></a>
-            </div>
+const searchInput = document.getElementById('searchInput');
+searchInput.addEventListener('input', function() {
+    const filter = searchInput.value.toLowerCase();
+    const movieCards = document.getElementsByClassName('movie-card');
+    for (let i = 0; i < movieCards.length; i++) {
+        const title = movieCards[i].dataset.title.toLowerCase();
+        movieCards[i].style.display = title.includes(filter) ? '' : 'none';
+    }
+});
 
-             <div class="movie-card" data-title="Black Adam">
-            <a href="films/blackadam.html"><img src="blackadam.jpg" alt="Black Adam"></a>
-        </div>
-
-        <div class="movie-card" data-title="Doctor Strange in the Multiverse of Madness">
-            <a href="films/doctor_strange.html"><img src="doctor_strange.jpg" alt="Doctor Strange"></a>
-        </div>
-
-        <div class="movie-card" data-title="Guardians of the Galaxy Vol. 3">
-            <a href="films/guardians3.html"><img src="guardians3.jpg" alt="Guardians of the Galaxy 3"></a>
-        </div>
-
-        <div class="movie-card" data-title="The Batman">
-            <a href="films/batman.html"><img src="batman.jpg" alt="The Batman"></a>
-        </div>
-
-        <div class="movie-card" data-title="Iron Man">
-            <a href="films/ironman.html"><img src="ironman.jpg" alt="Iron Man"></a>
-        </div>
-
-        <div class="movie-card" data-title="Wonder Woman 1984">
-            <a href="films/wonderwoman.html"><img src="wonderwoman.jpg" alt="Wonder Woman 1984"></a>
-        </div>
-
-        </div>
-    </section>
-
-    <!-- Script de recherche -->
-    <script>
-        const searchInput = document.getElementById('searchInput');
-        const movieGrid = document.getElementById('movieGrid');
-        const movieCards = movieGrid.getElementsByClassName('movie-card');
-
-        searchInput.addEventListener('input', function() {
-            const filter = searchInput.value.toLowerCase();
-
-            for (let i = 0; i < movieCards.length; i++) {
-                const title = movieCards[i].dataset.title.toLowerCase();
-                if (title.includes(filter)) {
-                    movieCards[i].style.display = '';
-                } else {
-                    movieCards[i].style.display = 'none';
-                }
-            }
-        });
-    </script>
+displayFilms();
+</script>
 
 </body>
 </html>
-

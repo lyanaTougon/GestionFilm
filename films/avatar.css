@@ -44,8 +44,8 @@ body {
     width: 100%;
     min-height: 100vh;
     display: flex;
-    justify-content: center; /* centre horizontalement */
-    align-items: center;     /* centre verticalement */
+    justify-content: center;
+    align-items: center;
     background-color: #171717;
     color: #fff;
     padding: 50px 5%;
@@ -63,7 +63,7 @@ body {
 
 /* Image du film */
 .film-image {
-    flex: 1 1 400px; /* largeur minimum */
+    flex: 1 1 400px;
 }
 
 .film-image img {
@@ -111,17 +111,18 @@ body {
     font-size: 14px;
 }
 
-/* Bouton trailer */
+/* ===== Boutons Trailer + Noter ===== */
 .film-info .watch {
     margin-top: 20px;
+    display: flex;
+    gap: 15px;
 }
 
-.film-info .watch .trailer-btn {
+.film-info .watch .trailer-btn,
+.film-info .watch .note-btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background-color: #0099ff;
-    color: #fff;
     padding: 10px 20px;
     border-radius: 5px;
     text-decoration: none;
@@ -129,8 +130,24 @@ body {
     transition: 0.3s;
 }
 
+/* Bouton Trailer */
+.film-info .watch .trailer-btn {
+    background-color: #0099ff;
+    color: #fff;
+}
+
 .film-info .watch .trailer-btn:hover {
     background-color: #0055aa;
+}
+
+/* Bouton Noter */
+.film-info .watch .note-btn {
+    background-color: #00c853;
+    color: #fff;
+}
+
+.film-info .watch .note-btn:hover {
+    background-color: #009e3d;
 }
 
 /* ===== Responsive ===== */
@@ -149,7 +166,10 @@ body {
         max-width: 90%;
         text-align: center;
     }
-}
 
+    .film-info .watch {
+        justify-content: center;
+    }
+}
 
 
