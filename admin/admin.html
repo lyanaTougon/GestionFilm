@@ -10,6 +10,10 @@
 
 <h1>Admin - Gestion des films</h1>
 
+<hr>
+
+<h2>Ajouter / Modifier un film</h2>
+
 <form id="filmForm">
     <input type="text" id="filmTitle" placeholder="Titre du film" required>
     <input type="text" id="filmDesc" placeholder="Description">
@@ -19,10 +23,36 @@
     <input type="hidden" id="editIndex">
 </form>
 
-<h2>Liste des films</h2>
+<h2>Liste des films enregistrés</h2>
 <ul id="filmList"></ul>
 
+<hr>
+
+<!-- 🔥 Films disponibles déplacés en BAS -->
+<h2>Films disponibles (pages HTML déjà créées)</h2>
+<ul id="existingPages"></ul>
+
 <script>
+// 🎬 Liste manuelle des pages film existantes dans ton dossier
+const existingFilmPages = [
+    "avatar.html",
+    "spiderman.html",
+    "ironman.html",
+    "batman.html"
+];
+
+// 👁️ Affiche les pages HTML existantes
+function displayExistingPages() {
+    const ul = document.getElementById('existingPages');
+    ul.innerHTML = "";
+
+    existingFilmPages.forEach(page => {
+        const li = document.createElement('li');
+        li.textContent = page;
+        ul.appendChild(li);
+    });
+}
+
 // Récupère les films
 function getFilms() {
     return JSON.parse(localStorage.getItem('films') || '[]');
@@ -33,13 +63,13 @@ function saveFilms(films) {
     localStorage.setItem('films', JSON.stringify(films));
 }
 
-// Affiche films
+// Affiche films enregistrés
 function displayFilmsAdmin() {
     const films = getFilms();
     const filmList = document.getElementById('filmList');
     filmList.innerHTML = '';
 
-    if(films.length === 0){
+    if (films.length === 0) {
         filmList.innerHTML = '<li>Aucun film pour le moment.</li>';
         return;
     }
@@ -85,11 +115,8 @@ document.getElementById('filmForm').addEventListener('submit', e => {
     const films = getFilms();
     const filmObj = { title, desc, img, link };
 
-    if(editIndex !== '') {
-        films[editIndex] = filmObj;
-    } else {
-        films.push(filmObj);
-    }
+    if (editIndex !== '') films[editIndex] = filmObj;
+    else films.push(filmObj);
 
     saveFilms(films);
     displayFilmsAdmin();
@@ -97,10 +124,13 @@ document.getElementById('filmForm').addEventListener('submit', e => {
     document.getElementById('editIndex').value = '';
 });
 
-// Affichage initial
+// 🔥 Appels initiaux
 displayFilmsAdmin();
+displayExistingPages();
 </script>
 
 </body>
 </html>
+
+
 
